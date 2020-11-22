@@ -1,0 +1,40 @@
+body {
+  margin: 0px;
+  width: 100vw;
+  height: 100vh;
+}
+
+#root {
+  height: 100%;
+}
+
+.map {
+  height: 100%;
+}
+
+.program-info {
+  position: absolute;
+  width: 20%;
+  top: 5px;
+  right: 5px;
+  z-index: 999;
+}
+
+.results {
+  width: 100%;
+  border-color: white;
+}
+
+#source {
+  vertical-align: center;
+  margin: 0.25rem;
+}
+
+#destination {
+  margin: 0.25rem;
+}
+
+#popup {
+  text-align: center;
+  align-items: center;
+}
