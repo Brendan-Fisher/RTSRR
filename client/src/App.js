@@ -38,7 +38,9 @@ class App extends Component {
       },
       nodes: {
         src: "",
+        srcName: "",
         dest: "",
+        destName: "",
       },
       collapse: false,
       zoom: 13,
@@ -67,7 +69,8 @@ class App extends Component {
     this.setState({
       nodes: {
         ...this.state.nodes,
-        src: i,
+        src: i.stop_id,
+        srcName: i.name,
       },
     });
   }
@@ -75,7 +78,8 @@ class App extends Component {
     this.setState({
       nodes: {
         ...this.state.nodes,
-        dest: i,
+        dest: i.stop_id,
+        destName: i.name,
       },
     });
   }
@@ -138,9 +142,9 @@ class App extends Component {
               }}
             >
               <CardBody style={{ padding: ".25rem" }}>
-                Start: {this.state.nodes.src}
+                Start: {this.state.nodes.srcName}
                 <br></br>
-                Destination: {this.state.nodes.dest} <br></br>
+                Destination: {this.state.nodes.destName} <br></br>
                 Performance: <br></br>
               </CardBody>
             </Card>
@@ -151,7 +155,7 @@ class App extends Component {
           className="map"
           center={position}
           zoom={this.state.zoom}
-          scrollWheelZoom={false}
+          scrollWheelZoom={true}
         >
           <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -165,7 +169,7 @@ class App extends Component {
             >
               <Popup>
                 <Button
-                  onClick={() => this.setSrc(stop.stop_id)}
+                  onClick={() => this.setSrc(stop)}
                   id="source"
                   color="primary"
                   size="sm"
@@ -175,7 +179,7 @@ class App extends Component {
                 </Button>
                 <br></br>
                 <Button
-                  onClick={() => this.setDest(stop.stop_id)}
+                  onClick={() => this.setDest(stop)}
                   id="destination"
                   color="primary"
                   size="sm"
