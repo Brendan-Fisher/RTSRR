@@ -19,7 +19,8 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.json({
-    message: "🦄🌈✨👋🌎🌍🌏✨🌈🦄",
+    message:
+      "Append /stops or /routes to the URL to get a printout of the stored stops and routes",
   });
 });
 
