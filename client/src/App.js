@@ -196,7 +196,11 @@ class App extends Component {
                 >
                   Set Destination
                 </Button>
-                <h6>{stop.name}</h6>
+                <h6>
+                  <em>
+                    <b>{stop.name}</b>
+                  </em>
+                </h6>
               </Popup>
             </Marker>
           ))}
