@@ -11,6 +11,7 @@ import {
   Button,
 } from "reactstrap";
 import React, { Component } from "react";
+import Joi from "joi";
 
 var myIcon = L.icon({
   iconUrl:
@@ -19,6 +20,13 @@ var myIcon = L.icon({
   iconAnchor: [12.5, 41],
   popupAnchor: [0, -41],
 });
+
+const schema = Joi.object().keys({
+  start: Joi.string().min(7).max(7).required(),
+  end: Joi.string().min(7).max(7).required(),
+});
+
+const API_URL = "http://localhost:9000";
 
 class App extends Component {
   constructor(props) {
@@ -34,8 +42,19 @@ class App extends Component {
       },
       collapse: false,
       zoom: 13,
+      stops: [],
     };
     this.toggle = this.toggle.bind(this);
+  }
+
+  componentDidMount() {
+    fetch(API_URL + "/stops")
+      .then((res) => res.json())
+      .then((stops) => {
+        this.setState({
+          stops,
+        });
+      });
   }
 
   toggle() {
@@ -61,9 +80,24 @@ class App extends Component {
     });
   }
 
+  searchIsValid = () => {
+    const searchPair = {
+      start: this.state.nodes.src,
+      end: this.state.nodes.dest,
+    };
+    const result = schema.validate(searchPair);
+
+    return result.error ? false : true;
+  };
+
   runProgram = (event) => {
     event.preventDefault();
+    this.toggle();
     console.log(this.state.nodes);
+
+    if (this.searchIsValid()) {
+      console.log("Searching for quickest path");
+    }
   };
 
   render() {
@@ -87,8 +121,9 @@ class App extends Component {
           </CardText>
           <Button
             color="primary"
-            onClick={(this.toggle, this.runProgram)}
+            onClick={this.runProgram}
             style={{ marginBottom: "1rem" }}
+            disabled={!this.searchIsValid()}
           >
             Run
           </Button>
@@ -103,8 +138,9 @@ class App extends Component {
               }}
             >
               <CardBody style={{ padding: ".25rem" }}>
-                Start: <br></br>
-                Destination: <br></br>
+                Start: {this.state.nodes.src}
+                <br></br>
+                Destination: {this.state.nodes.dest} <br></br>
                 Performance: <br></br>
               </CardBody>
             </Card>
@@ -121,29 +157,36 @@ class App extends Component {
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <Marker icon={myIcon} position={position}>
-            <Popup>
-              <Button
-                onClick={() => this.setSrc("source")}
-                id="source"
-                color="primary"
-                size="sm"
-                stop_id="source"
-              >
-                Set Start
-              </Button>
-              <br></br>
-              <Button
-                onClick={() => this.setDest("dest")}
-                id="destination"
-                color="primary"
-                size="sm"
-                stop_id="destination"
-              >
-                Set Destination
-              </Button>
-            </Popup>
-          </Marker>
+          {this.state.stops.map((stop) => (
+            <Marker
+              key={stop.stop_id}
+              position={[stop.lat, stop.long]}
+              icon={myIcon}
+            >
+              <Popup>
+                <Button
+                  onClick={() => this.setSrc(stop.stop_id)}
+                  id="source"
+                  color="primary"
+                  size="sm"
+                  block
+                >
+                  Set Start
+                </Button>
+                <br></br>
+                <Button
+                  onClick={() => this.setDest(stop.stop_id)}
+                  id="destination"
+                  color="primary"
+                  size="sm"
+                  block
+                >
+                  Set Destination
+                </Button>
+                <h6>{stop.name}</h6>
+              </Popup>
+            </Marker>
+          ))}
         </MapContainer>
       </div>
     );

@@ -27,11 +27,11 @@ body {
 
 #source {
   vertical-align: center;
-  margin: 0.25rem;
+  margin: 0.1rem;
 }
 
 #destination {
-  margin: 0.25rem;
+  vertical-align: center;
 }
 
 #popup {
