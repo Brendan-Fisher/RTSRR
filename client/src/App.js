@@ -13,6 +13,7 @@ import {
 } from "reactstrap";
 import React, { Component } from "react";
 import Joi from "joi";
+import { getStops, execute } from "./API";
 
 var myIcon = L.icon({
   iconUrl:
@@ -48,23 +49,15 @@ class App extends Component {
       collapse: false,
       zoom: 13,
       stops: [],
+      path: [],
     };
-    this.toggle = this.toggle.bind(this);
   }
 
   componentDidMount() {
-    fetch(API_URL + "/stops")
-      .then((res) => res.json())
-      .then((stops) => {
-        this.setState({
-          stops,
-        });
+    getStops().then((stops) => {
+      this.setState({
+        stops,
       });
-  }
-
-  toggle() {
-    this.setState({
-      collapse: !this.state.collapse,
     });
   }
 
@@ -78,6 +71,7 @@ class App extends Component {
       },
     });
   }
+
   setDest(i) {
     this.setState({
       nodes: {
@@ -101,12 +95,25 @@ class App extends Component {
 
   runProgram = (event) => {
     event.preventDefault();
-    this.toggle();
+    this.setState({
+      collapse: !this.state.collapse,
+    });
     console.log(this.state.nodes);
 
     if (this.searchIsValid()) {
       console.log("Searching for quickest path");
     }
+
+    const obj = {
+      start: this.state.nodes.src,
+      end: this.state.nodes.dest,
+    };
+
+    execute(obj).then((result) => {
+      this.setState({
+        path: result,
+      });
+    });
   };
 
   render() {
