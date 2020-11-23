@@ -4,7 +4,7 @@ const Joi = require("joi");
 
 let JoiStopSchema = Joi.object({
   stop_id: Joi.string().min(7).max(7),
-  name: Joi.string().min(1).max(50),
+  name: Joi.string().min(1).max(60),
   lat: Joi.number().min(-90).max(90),
   long: Joi.number().min(-180).max(180),
   routes: Joi.array().items(Joi.string()),

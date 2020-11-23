@@ -21,15 +21,22 @@ router.route("/:id").get(function (req, res) {
 });
 
 router.route("/add").post(function (req, res) {
-  let stop = new Stop(req.body);
-  stop
-    .save()
-    .then((stop) => {
-      res.status(200).send("stop added successfully");
-    })
-    .catch((err) => {
-      res.status(400).send("adding new stop failed");
+  if (req.body.batch) {
+    Stop.create(req.body.batch, function (err) {
+      if (err) res.send(err);
+      else res.json(req.body);
     });
+  } else {
+    let stop = new Stop(req.body);
+    stop
+      .save()
+      .then((stop) => {
+        res.status(200).send("route added successfully");
+      })
+      .catch((err) => {
+        res.status(400).send("adding new route failed");
+      });
+  }
 });
 
 module.exports = router;
