@@ -38,8 +38,10 @@ class App extends Component {
         long: -82.3248,
       },
       nodes: {
+        srcID: "",
         src: "",
         srcName: "",
+        destID: "",
         dest: "",
         destName: "",
       },
@@ -72,6 +74,7 @@ class App extends Component {
         ...this.state.nodes,
         src: i.stop_id,
         srcName: i.name,
+        srcID: i._id,
       },
     });
   }
@@ -81,6 +84,7 @@ class App extends Component {
         ...this.state.nodes,
         dest: i.stop_id,
         destName: i.name,
+        destID: i._id,
       },
     });
   }
