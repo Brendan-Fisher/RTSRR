@@ -21,10 +21,10 @@ router.route("/:id").get(function (req, res) {
 });
 
 router.route("/add").post(function (req, res) {
-  let route = new Route(req.body);
-  route
-    .save()
-    .then((route) => {
+  let RouteObj = new Route(req.body);
+
+  RouteObj.save()
+    .then((RouteObj) => {
       res.status(200).send("route added successfully");
     })
     .catch((err) => {

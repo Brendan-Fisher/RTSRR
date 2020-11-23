@@ -3,10 +3,9 @@ const Joigoose = require("joigoose")(mongoose);
 const Joi = require("joi");
 
 let JoiRouteSchema = Joi.object({
-  route_id: Joi.string().alphanum().min(7).max(7),
-  short_name: Joi.string().alphanum().min(1).max(50),
-  long_name: Joi.string().alphanum().min(1).max(50),
-  is_active: Joi.boolean(),
+  short_name: Joi.string().min(1).max(50),
+  route_id: Joi.string().min(7).max(7),
+  long_name: Joi.string().min(1).max(50),
   stops: Joi.array().items(Joi.string()),
 });
 

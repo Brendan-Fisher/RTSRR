@@ -23,7 +23,6 @@ app.get("/", (req, res) => {
   });
 });
 
-app.use("/api/v1", api);
 app.use("/stops", stops);
 app.use("/routes", routes);
 
