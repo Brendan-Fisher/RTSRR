@@ -9,6 +9,7 @@ import {
   CardText,
   CardTitle,
   Button,
+  CardSubtitle,
 } from "reactstrap";
 import React, { Component } from "react";
 import Joi from "joi";
@@ -118,7 +119,7 @@ class App extends Component {
             position: "absolute",
           }}
         >
-          <CardTitle tag="h5">RTS Route Runner</CardTitle>
+          <CardTitle tag="h4">RTS Route Runner</CardTitle>
           <CardText>
             Select two markers and click "Run" to calculate the quickest route
             between the two points
@@ -142,10 +143,18 @@ class App extends Component {
               }}
             >
               <CardBody style={{ padding: ".25rem" }}>
-                Start: {this.state.nodes.srcName}
-                <br></br>
-                Destination: {this.state.nodes.destName} <br></br>
-                Performance: <br></br>
+                <CardTitle tag="h4">Results:</CardTitle>
+                <CardSubtitle tag="h5" className="mb-2">
+                  Start Location:
+                </CardSubtitle>
+                <CardText>{this.state.nodes.srcName}</CardText>
+                <CardSubtitle tag="h5" className="mb-2" color="0384fc">
+                  Destination Location:
+                </CardSubtitle>
+                <CardText>{this.state.nodes.destName}</CardText>
+                <CardSubtitle tag="h5" className="mb-2">
+                  Performance:
+                </CardSubtitle>
               </CardBody>
             </Card>
           </Collapse>
