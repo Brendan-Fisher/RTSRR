@@ -20,11 +20,14 @@ router.route("/:id").get(function (req, res) {
   });
 });
 
+router.route("/find/:id").get(function (req, res) {
+  let stop_id = req.params.id;
+  Stop.find({ stop_id: stop_id }, function (err, stop) {
+    res.json(stop);
+  });
+});
+
 router.route("/add").post(function (req, res) {
-  console.log(
-    "Unable to add stops, all stop have already been added to database"
-  );
-  /*
   if (req.body.batch) {
     Stop.create(req.body.batch, function (err) {
       if (err) res.send(err);
@@ -41,7 +44,6 @@ router.route("/add").post(function (req, res) {
         res.status(400).send("adding new route failed");
       });
   }
-  */
 });
 
 module.exports = router;

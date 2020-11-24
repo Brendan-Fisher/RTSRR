@@ -20,11 +20,14 @@ router.route("/:id").get(function (req, res) {
   });
 });
 
+router.route("/find/:id").get(function (req, res) {
+  let route_id = req.params.id;
+  Route.find({ route_id: route_id }, function (err, route) {
+    res.json(route);
+  });
+});
+
 router.route("/add").post(function (req, res) {
-  console.log(
-    "Unable to add routes, all routes have already been added to database"
-  );
-  /*
   if (req.body.batch) {
     Route.create(req.body.batch, function (err) {
       if (err) res.send(err);
@@ -38,10 +41,10 @@ router.route("/add").post(function (req, res) {
         res.status(200).send("route added successfully");
       })
       .catch((err) => {
+        console.log(err);
         res.status(400).send("adding new route failed");
       });
   }
-  */
 });
 
 module.exports = router;
