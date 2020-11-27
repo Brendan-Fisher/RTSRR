@@ -21,7 +21,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.json({
     message:
-      "Append /stops or /routes to the URL to get a printout of the stored stops and routes",
+      "Append /stops, /routes, or /edges to the URL to get a printout of the stored stops, routes, or edges",
   });
 });
 
