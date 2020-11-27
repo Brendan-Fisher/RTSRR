@@ -77,4 +77,36 @@ router.route("/add").post(function (req, res) {
   */
 });
 
+router.route("/addWeight").get(function (req, res) {
+  if (req.body.batch) {
+    for (var i = 0; i < req.body.batch; i++) {
+      var from = req.body.from;
+      var to = req.body.to;
+      var weight = req.body.weight;
+
+      Edge.updateOne(
+        { src: from, "edges.dest": to },
+        { $inc: { "edges.$.weight": weight } },
+        function (err) {
+          if (err) res.json(err);
+          else res.status(200).send("Edge updated");
+        }
+      );
+    }
+  } else {
+    var from = req.body.from;
+    var to = req.body.to;
+    var weight = req.body.weight;
+
+    Edge.updateOne(
+      { src: from, "edges.dest": to },
+      { $inc: { "edges.$.weight": weight } },
+      function (err) {
+        if (err) res.json(err);
+        else res.status(200).send("Edge updated");
+      }
+    );
+  }
+});
+
 module.exports = router;
