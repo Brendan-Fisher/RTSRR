@@ -2,6 +2,7 @@ const express = require("express");
 require("dotenv").config();
 const router = express.Router();
 const Route = require("./route.model");
+const Edge = require("./edge.model");
 
 router.route("/").get(function (req, res) {
   Route.find(function (err, routes) {
@@ -27,7 +28,20 @@ router.route("/find/:id").get(function (req, res) {
   });
 });
 
+router.route("/findByStop/:id").get(function (req, res) {
+  let stop_id = req.params.id;
+  Route.find(function (err, routes) {
+    if (err) {
+      res.status(400).send(err);
+    } else {
+      res.json(routes);
+    }
+  });
+});
+
 router.route("/add").post(function (req, res) {
+  console.log("Unable to add route, database has been filled");
+  /*
   if (req.body.batch) {
     Route.create(req.body.batch, function (err) {
       if (err) res.send(err);
@@ -42,9 +56,10 @@ router.route("/add").post(function (req, res) {
       })
       .catch((err) => {
         console.log(err);
-        res.status(400).send("adding new route failed");
+        res.status(400).send(err);
       });
   }
+  */
 });
 
 module.exports = router;

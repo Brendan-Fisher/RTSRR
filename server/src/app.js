@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const stops = require("./api/stops");
 const routes = require("./api/routes");
+const edges = require("./api/edges");
 const cors = require("cors");
 
 require("dotenv").config();
@@ -20,12 +21,13 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.json({
     message:
-      "Append /stops or /routes to the URL to get a printout of the stored stops and routes",
+      "Append /stops, /routes, or /edges to the URL to get a printout of the stored stops, routes, or edges",
   });
 });
 
 app.use("/stops", stops);
 app.use("/routes", routes);
+app.use("/edges", edges);
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);

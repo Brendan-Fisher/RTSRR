@@ -9,9 +9,9 @@ export function getStops() {
 }
 
 export function execute(obj) {
-  return fetch(API_URL + "/stops")
+  return fetch(API_URL + "/edges")
     .then((res) => res.json())
-    .then((stops) => {
-      return stops;
+    .then((edges) => {
+      console.log("Edges retreived");
     });
 }
