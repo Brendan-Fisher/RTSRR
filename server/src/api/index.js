@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 
 const stops = require("./stops");
 const routes = require("./routes");
+const edges = require("./edges");
 
 const router = express.Router();
 
@@ -26,5 +27,6 @@ router.get("/", (req, res) => {
 
 router.use("/stops", stops);
 router.use("/routes", routes);
+router.use("/edges", edges);
 
 module.exports = router;

@@ -28,6 +28,8 @@ router.route("/find/:id").get(function (req, res) {
 });
 
 router.route("/add").post(function (req, res) {
+  console.log("Unable to add stops, database has been filled");
+  /*
   if (req.body.batch) {
     Stop.create(req.body.batch, function (err) {
       if (err) res.send(err);
@@ -38,12 +40,13 @@ router.route("/add").post(function (req, res) {
     stop
       .save()
       .then((stop) => {
-        res.status(200).send("route added successfully");
+        res.status(200).send("stop added successfully");
       })
       .catch((err) => {
-        res.status(400).send("adding new route failed");
+        res.status(400).send(err);
       });
   }
+  */
 });
 
 module.exports = router;

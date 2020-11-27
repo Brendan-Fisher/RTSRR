@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const stops = require("./api/stops");
 const routes = require("./api/routes");
+const edges = require("./api/edges");
 const cors = require("cors");
 
 require("dotenv").config();
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 
 app.use("/stops", stops);
 app.use("/routes", routes);
+app.use("/edges", edges);
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
