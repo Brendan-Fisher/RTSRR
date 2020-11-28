@@ -39,11 +39,9 @@ class App extends Component {
         long: -82.3248,
       },
       nodes: {
-        srcID: "",
-        src: "",
+        from: {},
+        to: {},
         srcName: "",
-        destID: "",
-        dest: "",
         destName: "",
       },
       collapse: false,
@@ -65,9 +63,8 @@ class App extends Component {
     this.setState({
       nodes: {
         ...this.state.nodes,
-        src: i.stop_id,
+        from: i,
         srcName: i.name,
-        srcID: i._id,
       },
     });
   }
@@ -76,17 +73,16 @@ class App extends Component {
     this.setState({
       nodes: {
         ...this.state.nodes,
-        dest: i.stop_id,
+        to: i,
         destName: i.name,
-        destID: i._id,
       },
     });
   }
 
   searchIsValid = () => {
     const searchPair = {
-      start: this.state.nodes.src,
-      end: this.state.nodes.dest,
+      start: this.state.nodes.from.stop_id,
+      end: this.state.nodes.to.stop_id,
     };
     const result = schema.validate(searchPair);
 

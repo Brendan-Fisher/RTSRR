@@ -79,17 +79,17 @@ router.route("/add").post(function (req, res) {
 
 router.route("/addWeight").get(function (req, res) {
   if (req.body.batch) {
-    for (var i = 0; i < req.body.batch; i++) {
-      var from = req.body.from;
-      var to = req.body.to;
-      var weight = req.body.weight;
+    for (var i = 0; i < req.body.batch.length; i++) {
+      var from = req.body.batch[i].from;
+      var to = req.body.batch[i].to;
+      var weight = req.body.batch[i].weight;
 
       Edge.updateOne(
         { src: from, "edges.dest": to },
-        { $inc: { "edges.$.weight": weight } },
+        { $set: { "edges.$.weight": weight } },
         function (err) {
-          if (err) res.json(err);
-          else res.status(200).send("Edge updated");
+          if (err) console.log(err);
+          else console.log("Edges updated");
         }
       );
     }
@@ -100,7 +100,7 @@ router.route("/addWeight").get(function (req, res) {
 
     Edge.updateOne(
       { src: from, "edges.dest": to },
-      { $inc: { "edges.$.weight": weight } },
+      { $set: { "edges.$.weight": weight } },
       function (err) {
         if (err) res.json(err);
         else res.status(200).send("Edge updated");
