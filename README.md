@@ -21,6 +21,8 @@ Still under development
 <b>Resources from</b>
 - [Transloc API](https://rapidapi.com/transloc/api/openapi-1-2/endpoints)
 - [Distance API](https://rapidapi.com/Distance.to/api/distance)
+- [Create-React-App](https://create-react-app.dev/)
+- [Create-Express-API](https://www.npmjs.com/package/create-express-api)
 
 ## Features
 - Seamless integration of leaflet map and markers for selecting start and destination nodes
