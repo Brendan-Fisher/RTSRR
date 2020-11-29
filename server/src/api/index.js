@@ -25,6 +25,7 @@ router.get("/", (req, res) => {
   });
 });
 
+// Routers for the 3 collections stored in the database
 router.use("/stops", stops);
 router.use("/routes", routes);
 router.use("/edges", edges);

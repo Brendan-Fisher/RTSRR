@@ -3,6 +3,10 @@ require("dotenv").config();
 const router = express.Router();
 const Stop = require("./stop.model");
 
+/**
+ * Router for localhost:9000/stops
+ *  returns all of the stops in the database
+ */
 router.route("/").get(function (req, res) {
   Stop.find(function (err, stops) {
     if (err) {
@@ -13,6 +17,9 @@ router.route("/").get(function (req, res) {
   });
 });
 
+/**
+ * Allows for lookup of individual stop based on its mongoose ObjectID
+ */
 router.route("/:id").get(function (req, res) {
   let id = req.params.id;
   Stop.findById(id, function (err, stop) {
@@ -20,6 +27,9 @@ router.route("/:id").get(function (req, res) {
   });
 });
 
+/**
+ * Allows for lookup of individual stop based on its unique stop_id
+ */
 router.route("/find/:id").get(function (req, res) {
   let stop_id = req.params.id;
   Stop.find({ stop_id: stop_id }, function (err, stop) {
@@ -27,6 +37,12 @@ router.route("/find/:id").get(function (req, res) {
   });
 });
 
+/**
+ * Router for localhost:9000/routes/add
+ *  Adds new stops to the database
+ *  Allows for adding new stops in batches
+ *  Used postman to add all stops after getting them from the Transloc API
+ */
 router.route("/add").post(function (req, res) {
   console.log("Unable to add stops, database has been filled");
   /*

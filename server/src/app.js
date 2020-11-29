@@ -18,6 +18,7 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
+// Homepage of backend of program
 app.get("/", (req, res) => {
   res.json({
     message:
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
   });
 });
 
+// Routers for the 3 collections stored in the database
 app.use("/stops", stops);
 app.use("/routes", routes);
 app.use("/edges", edges);
