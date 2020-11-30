@@ -1,3 +1,5 @@
+//import { djikstra } from "./algorithms"
+
 const API_URL = "http://localhost:9000";
 
 async function createPairs() {
@@ -55,6 +57,8 @@ export function execute(obj) {
   return fetch(API_URL + "/edges")
     .then((res) => res.json())
     .then((edges) => {
-      console.log("Edges retreived");
+      //var djikPath = djikstra(edges);
+      //return djikPath;
+      console.log("edges retreived")
     });
 }
