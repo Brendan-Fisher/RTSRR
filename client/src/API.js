@@ -1,4 +1,5 @@
-//import { djikstra } from "./algorithms"
+import { djikstra } from "./algorithms/djikstra"
+import { BFS } from "./algorithms/BFS"
 
 const API_URL = "http://localhost:9000";
 
@@ -57,8 +58,10 @@ export function execute(obj) {
   return fetch(API_URL + "/edges")
     .then((res) => res.json())
     .then((edges) => {
-      //var djikPath = djikstra(edges);
+      var djikPath = djikstra(obj.from, obj.to, edges);
+      var BFSPath = BFS(obj.from, obj.to, edges)
       //return djikPath;
-      console.log("edges retreived")
+      console.log(djikPath)
+      console.log(BFSPath)
     });
 }

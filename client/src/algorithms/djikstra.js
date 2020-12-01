@@ -1,5 +1,3 @@
-export function djikstra(edges) {
-    return edges[0].src;
-
-    
+export function djikstra(from, to, graph) {
+    return graph[0].src
 }
