@@ -106,14 +106,15 @@ class App extends Component {
     }
 
     const obj = {
-      start: this.state.nodes.src,
-      end: this.state.nodes.dest,
+      from: this.state.nodes.from,
+      to: this.state.nodes.to,
     };
 
     execute(obj).then((result) => {
       this.setState({
         path: result,
       });
+      console.log(this.state.path)
     });
   };
 

@@ -19,9 +19,9 @@ class PriorityQueue {
         //Current index of the new node
         let currentIndex = this.heap.length - 1;
         //Index of parent node => 0 if new node is the root & and floor((index-1)/2) otherwise
-        let parentIndex = (currentIndex==0) ? 0 : Math.floor((currentIndex - 1) / 2);
+        let parentIndex = (currentIndex===0) ? 0 : Math.floor((currentIndex - 1) / 2);
         //Heapify Up => While index of new node != 0 and new node's value < parent's value
-        while ((currentIndex != 0) && newNode.value < this.heap[parentIndex].value) {
+        while ((currentIndex !== 0) && newNode.value < this.heap[parentIndex].value) {
             //If in here, Nodes => create a temp node called tempNode
             const parentNode = this.heap[parentIndex];
             this.heap[parentIndex] = newNode;
@@ -34,7 +34,7 @@ class PriorityQueue {
     }
     remove() {
         //If heap is empty
-        if (this.size == 0) {
+        if (this.size === 0) {
             return null;
         }
         //Need to return the top node
@@ -65,7 +65,7 @@ class PriorityQueue {
                 smallestNodeIndex = rightChildIndex;
             }
             //If smallest node changed
-            if (currentIndex != smallestNodeIndex) {
+            if (currentIndex !== smallestNodeIndex) {
                 //Swap
                 const parentNode = this.heap[currentIndex];
                 this.heap[currentIndex] = this.heap[smallestNodeIndex];
@@ -84,7 +84,7 @@ class PriorityQueue {
 }
 function setMaps(distance, newSize, graph, from, _predecessor) {
     for(var i = 0; i < graph.length; i++) {
-        if (graph[i].src != from.stop_id) {
+        if (graph[i].src !== from.stop_id) {
             distance.set(graph[i].src, {distance: Infinity, neighbors: graph[i].edges});
             _predecessor.set(graph[i].src, -1);
         }
@@ -157,9 +157,9 @@ export function djikstra(from, to, graph) {
     var reversedPath = [];
     var stopID = to.stop_id;
     reversedPath.push(stopID);
-    while (stopID != from.stop_id) {
+    while (stopID !== from.stop_id) {
         stopID = predecessor.get(stopID);
-        if (stopID == -1) {
+        if (stopID === -1) {
             return [];
         }
         reversedPath.push(stopID);
@@ -170,5 +170,3 @@ export function djikstra(from, to, graph) {
     }
     return path;
 }
-
-export default djikstra

@@ -58,10 +58,11 @@ export function execute(obj) {
   return fetch(API_URL + "/edges")
     .then((res) => res.json())
     .then((edges) => {
+      //console.log(obj)
       var djikPath = djikstra(obj.from, obj.to, edges);
-      var BFSPath = BFS(obj.from, obj.to, edges)
-      //return djikPath;
-      console.log(djikPath)
-      console.log(BFSPath)
+      //var BFSPath = BFS(obj.from, obj.to, edges)
+      return djikPath;
+      //console.log(djikPath)
+      //console.log(BFSPath)
     });
 }
