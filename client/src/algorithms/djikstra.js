@@ -110,7 +110,7 @@ export function djikstra(from, to, graph) {
     queue.insert(from.stop_id,0, distance.get(from.stop_id).neighbors);
     
     //Start of Djikstra's Algorithm
-    while (unchecked_Set.size > 0) {
+    while (queue.size > 0) {
         //Bus Stop with the shortest distance from the source bus stop
         let node = queue.remove();
         let stop = node.stopID;
