@@ -80,6 +80,7 @@ class App extends Component {
       collapse: false,
       zoom: 13,
       stops: [],
+      noPath: false,
       paths: {
         dPath: [],
         dTime: 0,
@@ -146,6 +147,7 @@ class App extends Component {
     event.preventDefault();
     this.setState({
       collapse: !this.state.collapse,
+      noPath: false,
     });
 
     const obj = {
@@ -154,15 +156,22 @@ class App extends Component {
     };
 
     Djikstra(obj).then((result) => {
-      this.setState({
-        paths: {
-          ...this.state.paths,
-          dPath: result.slice(0, result.length-1),
-          dTime: result.slice(result.length-1)
-        },
-        executed: !this.state.executed,
-        dPoly: this.DjikstraPolyMaker(result)
-      });
+      if(result.length > 0){
+        this.setState({
+          paths: {
+            ...this.state.paths,
+            dPath: result.slice(0, result.length-1),
+            dTime: result.slice(result.length-1)
+          },
+          executed: !this.state.executed,
+          dPoly: this.DjikstraPolyMaker(result)
+        });
+      }
+      else {
+        this.setState({
+          noPath: true,
+        })
+      }
     });
 
     /*

@@ -63,11 +63,13 @@ async function buildPath(path){
   var stops = await fetch(API_URL + "/stops").then((res) => res.json());
   var newPath = []
 
-  for(var i = 0; i < path.length-1; i++){
-    // eslint-disable-next-line
-    newPath.push(stops.find(stop => stop.stop_id === path[i]));
+  if(path.length !== 1){
+    for(var i = 0; i < path.length-1; i++){
+      // eslint-disable-next-line
+      newPath.push(stops.find(stop => stop.stop_id === path[i]));
+    }
+    newPath.push(path.length-1)
   }
-  newPath.push(path.length-1)
   return newPath
 }
 
