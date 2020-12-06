@@ -304,7 +304,7 @@ class App extends Component {
             console.log("Program is pathfinding")
           }
           {
-            !this.state.noPath ? 
+            !this.state.noPath && this.state.executed ? 
             this.state.paths.dPath.map((stop) => (
               [
                 <Marker
