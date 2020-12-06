@@ -300,7 +300,11 @@ class App extends Component {
                 </Popup>
               </Marker>
             ))
-          :
+            :
+            console.log("Program is pathfinding")
+          }
+          {
+            !this.state.noPath ? 
             this.state.paths.dPath.map((stop) => (
               [
                 <Marker
@@ -333,6 +337,8 @@ class App extends Component {
                 <Polyline color={'black'} positions={this.state.dPoly} />
               ]
             ))
+            :
+            console.log("No Possible Path between the two stops")
           }
         </MapContainer>
       </div>
