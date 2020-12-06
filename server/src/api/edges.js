@@ -64,6 +64,13 @@ router.route("/").get(function (req, res) {
   });
 });
 
+router.route("/find/:id").get(function (req, res) {
+  let stop_id = req.params.id;
+  Edge.find({ src: stop_id }, function (err, edge) {
+    res.json(edge);
+  });
+})
+
 /**
  * Router for localhost:9000/edges/add
  *  Adds new edges to the database
@@ -94,11 +101,36 @@ router.route("/add").post(function (req, res) {
 });
 
 /**
+ * Router for localhost:9000/edges/remove
+ *  returns an array of all the edges that need to be looked at because their edge weights are greater than 3000
+ */
+router.route("/remove").get(function (req, res) {
+  var badEdges = []
+  Edge.find(function (err, edgeList) {
+    if(err) console.log(err)
+    else {
+      for(var i = 0; i < edgeList.length; i++){
+        for(var j = 0; j < edgeList[i].edges.length; j++){
+          if(edgeList[i].edges[j].weight > 2000){
+            var src = edgeList[i].src
+            var dest = edgeList[i].edges[j].dest
+            badEdges.push({src, dest})
+          } 
+        }
+      }
+      res.json(badEdges)
+    }
+  })
+})
+
+/**
  * Router for localhost:9000/edges/addWeight
  *  After creating the edges, this function allows user to add the weights to each edge
  *  Weights were determined by using a Distance API to get a reasonable measure for how far a car would travel to get from one stop to another
  */
 router.route("/addWeight").get(function (req, res) {
+  console.log("Unable to add weight to edge/s, all edges in database have already been weighted")
+  /*
   if (req.body.batch) {
     for (var i = 0; i < req.body.batch.length; i++) {
       var from = req.body.batch[i].from;
@@ -128,6 +160,7 @@ router.route("/addWeight").get(function (req, res) {
       }
     );
   }
+  */
 });
 
 module.exports = router;

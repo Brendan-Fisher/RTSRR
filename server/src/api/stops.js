@@ -37,6 +37,16 @@ router.route("/find/:id").get(function (req, res) {
   });
 });
 
+router.route("/findPath").get(function (req, res) {
+  let path = [];
+  for(var i = 0; i < req.body.path.length; i++){
+    Stop.find({ stop_id: req.body.path[i] }, function (err, stop) {
+      path.push(stop)
+    })
+  }
+  res.json(path)
+})
+
 /**
  * Router for localhost:9000/routes/add
  *  Adds new stops to the database
