@@ -43,6 +43,7 @@ class PriorityQueue {
         this.size = this.size - 1;
         //Move the last node to the top
         this.heap[0] = this.heap[this.size];
+        this.heap.pop();
         //Current index
         let currentIndex = 0;
         //Left Child's index
@@ -101,21 +102,12 @@ export function djikstra(from, to, graph) {
     var distance = new Map();
     var predecessor = new Map();
     var queue = new PriorityQueue();
-
-    //Add vertices to unchecked Set
-    for(var i = 0; i < graph.length; i++) {
-        unchecked_Set.add(graph[i].src);
-    }
         
     //Set all the distances to infinity, source distance to 0, and all predecessors to -1
     setMaps(distance, graph.length, graph, from, predecessor);
 
-    //Add distances to priority queue
-    const iterator = distance.entries();
-    for (var i = 0; i < distance.size; i++) {
-        let arr = iterator.next().value;
-        queue.insert(arr[0], arr[1].distance, arr[1].neighbors);
-    }
+    //Insert source node to queue
+    queue.insert(from.stop_id,0, distance.get(from.stop_id).neighbors);
     
     //Start of Djikstra's Algorithm
     while (unchecked_Set.size > 0) {
@@ -133,20 +125,7 @@ export function djikstra(from, to, graph) {
             if (newDistance < oldDistance) {
                 distance.set(destStop, {distance: newDistance, neighbors: distance.get(destStop).neighbors});
                 predecessor.set(destStop, stop);
-            }
-        }
-        //Remove bus stop from unchecked set and insert it into the checked set
-        unchecked_Set.delete(stop);
-        checked_Set.add(stop);
-
-        //Recreate Queue
-        queue = new PriorityQueue();
-        //Add distances to priority queue but if stop is in checked set, don't add it
-        const iterator2 = distance.entries();
-        for (var i = 0; i < distance.size; i++) {
-            let arr = iterator2.next().value;
-            if (!checked_Set.has(arr[0])) {
-                queue.insert(arr[0], arr[1].distance, arr[1].neighbors);
+                queue.insert(destStop, distance.get(destStop).distance, distance.get(destStop).neighbors);
             }
         }
     }
