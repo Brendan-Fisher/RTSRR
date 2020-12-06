@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 import React, { Component } from "react";
 import Joi from "joi";
-import { getStops, Djikstra, Bfs } from "./API";
+import { getStops, Djikstra, Bfs, PolyMaker } from "./API";
 import stop_icon from './icons/stop_icon.svg'
 import djikstra_icon from './icons/djikstra.svg'
 import bfs_icon from './icons/bfs.svg'
@@ -134,14 +134,6 @@ class App extends Component {
     return result.error ? false : true;
   };
 
-  DjikstraPolyMaker = (path) => {
-    var output = [];
-    for(var i = 0; i < path.length-1; i++){
-      output.push([path[i].lat, path[i].long]);
-    }
-    return output;
-  }
-
   // Called when "Run" button is clicked, entry point into backend pathfinding
   runProgram = (event) => {
     event.preventDefault();
@@ -164,7 +156,7 @@ class App extends Component {
             dTime: result.slice(result.length-1)
           },
           executed: !this.state.executed,
-          dPoly: this.DjikstraPolyMaker(result)
+          dPoly: PolyMaker(result)
         });
       }
       else {

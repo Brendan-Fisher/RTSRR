@@ -59,6 +59,14 @@ export function getStops() {
     });
 }
 
+export function PolyMaker(path) {
+  var output = [];
+  for(var i = 0; i < path.length-1; i++){
+    output.push([path[i].lat, path[i].long]);
+  }
+  return output;
+}
+
 async function buildPath(path){
   var stops = await fetch(API_URL + "/stops").then((res) => res.json());
   var newPath = []
