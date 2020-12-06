@@ -5,6 +5,7 @@ class Node {
         this.neighbors = _neighbors;
     }
 }
+
 class PriorityQueue {
     constructor() {
       this.heap = []
@@ -82,6 +83,7 @@ class PriorityQueue {
         return toRemove;
     }
 }
+
 function setMaps(distance, newSize, graph, from, _predecessor) {
     for(var i = 0; i < graph.length; i++) {
         if (graph[i].src !== from.stop_id) {
@@ -94,6 +96,7 @@ function setMaps(distance, newSize, graph, from, _predecessor) {
         }
     }
 }
+
 export function djikstra(from, to, graph) {
     //Containers
     var checked_Set = new Set();
@@ -165,8 +168,10 @@ export function djikstra(from, to, graph) {
         reversedPath.push(stopID);
     }
     let path = reversedPath.reverse();
+    /*
     for (var i = 0; i < path.length; i++) {
         console.log(path[i]);
     }
+    */
     return path;
 }

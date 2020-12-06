@@ -3,6 +3,11 @@ import { BFS } from "./algorithms/BFS"
 
 const API_URL = "http://localhost:9000";
 
+/**
+ * Function Used to create the adjacency list that is used in the pathfinding algorithms
+ *  run once then stored in the database
+ */
+/*
 async function createPairs() {
   var edgeList = await fetch(API_URL + "/edges").then((res) => res.json());
   var stops = await fetch(API_URL + "/stops").then((res) => res.json());
@@ -44,25 +49,50 @@ async function createPairs() {
 
   console.log(JSON.stringify(pairs));
 }
+*/
 
 export function getStops() {
   return fetch(API_URL + "/stops")
     .then((res) => res.json())
     .then((stops) => {
-      //createPairs();
       return stops;
     });
 }
 
-export function execute(obj) {
+async function buildPath(path){
+  var stops = await fetch(API_URL + "/stops").then((res) => res.json());
+  var newPath = []
+
+  for(var i = 0; i < path.length-1; i++){
+    // eslint-disable-next-line
+    newPath.push(stops.find(stop => stop.stop_id === path[i]));
+  }
+  newPath.push(path.length-1)
+  return newPath
+}
+
+export async function Djikstra(obj) {
   return fetch(API_URL + "/edges")
     .then((res) => res.json())
     .then((edges) => {
-      //console.log(obj)
-      var djikPath = djikstra(obj.from, obj.to, edges);
-      //var BFSPath = BFS(obj.from, obj.to, edges)
-      return djikPath;
-      //console.log(djikPath)
-      //console.log(BFSPath)
+      var t0 = new Date().getTime();
+      var djikPath = djikstra(obj.from, obj.to, edges)
+      var t1 = new Date().getTime();
+      var dTime = t1-t0
+      djikPath.push(dTime)
+      return buildPath(djikPath)
     });
+}
+
+export async function Bfs(obj) {
+  return fetch(API_URL + "/edges")
+    .then((res) => res.json())
+    .then((edges) => {
+      var t0 = new Date().getTime();
+      var bfsPath = BFS(obj.from, obj.to, edges)
+      var t1 = new Date().getTime();
+      var bTime = t1-t0
+      bfsPath.push(bTime)
+      return buildPath(bfsPath)
+    })
 }
