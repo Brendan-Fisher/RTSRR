@@ -56,42 +56,48 @@ class Queue
 
 
  export function BFS(from, to, graph){
-    
+    // Containers
     var visited = new Set();
     var queue = new Queue();
     var neighbors = new Map();
     var predecessor = new Map();
 
+    // Create maps with stop_id as the key
     setMaps(neighbors, predecessor, graph);
 
     queue.enqueue(from.stop_id)
-
+    // Queue and add the starting stop_id to the visited array
     visited.add(from.stop_id);
     
-    
+    // Start BFS
     while(!queue.isEmpty())
     {
         var breaker = false;
+
+        // Allow t to take on stop_id of the first one in the queue, and dequeue
         let t = queue.front();
         queue.dequeue();
 
         for(var i = 0; i < neighbors.get(t).neighbors.length; i++)
         {
-            
-            var source = neighbors.get(t).neighbors[i].dest;
-            
-
-            if(!visited.has(source))
+            // Make stopID be the stop_id's of t's neighbors
+            var stopID = neighbors.get(t).neighbors[i].dest;
+        
+            // if stopID hasn't been visited
+            if(!visited.has(stopID))
             {
                 
-                visited.add(source);
+                visited.add(stopID);
                 
-                predecessor.set(source, t);
-                if(source === to.stop_id)
+                // Add to predecessor map to keep track of route
+                predecessor.set(stopID, t);
+
+                // Break for and while loop if stopID equals destination stop_id
+                if(stopID === to.stop_id)
                 {
                     breaker = true;
                 }
-                queue.enqueue(source);
+                queue.enqueue(stopID);
             }
             
             if(breaker)
@@ -105,6 +111,7 @@ class Queue
 
     }
 
+    // Create list of stops leading from source stop to destination
     var reversedPath = [];
     var stopID = to.stop_id;
     reversedPath.push(stopID);
