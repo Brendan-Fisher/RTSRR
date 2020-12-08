@@ -107,14 +107,14 @@ export function BFS(from, to, graph){
 
     // Create list of stops leading from source stop to destination
     var reversedPath = [];
-    var stopID = to.stop_id;
-    reversedPath.push(stopID);
+    var stop_ID = to.stop_id;
+    reversedPath.push(stop_ID);
     while (stopID !== from.stop_id) {
-        stopID = predecessor.get(stopID);
-        if (stopID === -1) {
+        stop_ID = predecessor.get(stop_ID);
+        if (stop_ID === -1) {
             return [];
         }
-        reversedPath.push(stopID);
+        reversedPath.push(stop_ID);
     }
     let path = reversedPath.reverse();
     /*for (var i = 0; i < path.length; i++) {
