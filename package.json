@@ -1,0 +1,20 @@
+{
+  "name": "rtsrr",
+  "version": "1.0.0",
+  "description": "**RTS Route Runners** is an application built on the MERN stack that compares the efficiency of the BFS and Djikstra's pathfinding algorithm for finding the most efficient route from one bus stop to another in the Gainesville, FL area.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Brendan-Fisher/RTSRR.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Brendan-Fisher/RTSRR/issues"
+  },
+  "homepage": "https://github.com/Brendan-Fisher/RTSRR#readme"
+}

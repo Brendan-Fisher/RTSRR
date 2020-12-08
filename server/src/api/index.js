@@ -19,6 +19,7 @@ mongoose
   })
   .catch((err) => console.log(err));
 
+
 router.get("/", (req, res) => {
   res.json({
     message: "API - 👋🌎🌍🌏",
