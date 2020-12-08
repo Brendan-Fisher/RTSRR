@@ -51,6 +51,8 @@ async function createPairs() {
 }
 */
 
+//function operation(dPath, bPath, isUnion = false)
+
 export function getStops() {
   return fetch(API_URL + "/stops")
     .then((res) => res.json())
@@ -76,7 +78,7 @@ async function buildPath(path){
       // eslint-disable-next-line
       newPath.push(stops.find(stop => stop.stop_id === path[i]));
     }
-    newPath.push(path.length-1)
+    newPath.push(path[path.length-1])
   }
   return newPath
 }
@@ -89,6 +91,7 @@ export async function Djikstra(obj) {
       var djikPath = djikstra(obj.from, obj.to, edges)
       var t1 = new Date().getTime();
       var dTime = t1-t0
+      console.log("Djikstra Time: ", dTime)
       djikPath.push(dTime)
       return buildPath(djikPath)
     });
