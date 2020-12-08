@@ -71,7 +71,8 @@ class App extends Component {
             dPath: result.slice(0, result.length-1),
             dTime: result.slice(result.length-1)
           },
-          dPoly: PolyMaker(result)
+          dPoly: PolyMaker(result),
+          noPath: false,
         });
       }
       else {
@@ -90,12 +91,15 @@ class App extends Component {
             bPath: result.slice(0, result.length-1),
             bTime: result.slice(result.length-1)
           },
-          bPoly: PolyMaker(result)
+          bPoly: PolyMaker(result),
+          noPath: false,
         });
       }
-      else this.setState({
-        noPath: true
-      })
+      else {
+        this.setState({
+          noPath: true
+        })
+      }
     })
   }
 
@@ -241,16 +245,13 @@ class App extends Component {
 
           { // Map all of the stops and take care of user choosing a start and a destination stop 
             !this.state.executed ?
-
               this.state.stops.map((stop) => (
                 <Marker
                   key={stop.stop_id}
                   position={[stop.lat, stop.long]}
                   icon={stopIcon}
                 >
-
                   <Popup>
-
                     <Button
                       onClick={() => this.handleStartClick(stop)}
                       id="source"
@@ -281,9 +282,7 @@ class App extends Component {
 
                 </Marker>
               ))
-
             :
-
             console.log("Program is pathfinding")
           }
           { // Draw the Paths or display the error card using the JSX elements loaded earlier

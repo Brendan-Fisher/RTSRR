@@ -109,7 +109,7 @@ export function BFS(from, to, graph){
     var reversedPath = [];
     var stop_ID = to.stop_id;
     reversedPath.push(stop_ID);
-    while (stopID !== from.stop_id) {
+    while (stop_ID !== from.stop_id) {
         stop_ID = predecessor.get(stop_ID);
         if (stop_ID === -1) {
             return [];
@@ -117,8 +117,10 @@ export function BFS(from, to, graph){
         reversedPath.push(stop_ID);
     }
     let path = reversedPath.reverse();
-    /*for (var i = 0; i < path.length; i++) {
+    /*
+    for (var i = 0; i < path.length; i++) {
         console.log(path[i]);
-    }*/
+    }
+    */
     return path;
 }
