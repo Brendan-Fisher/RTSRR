@@ -7,6 +7,8 @@ We were motivated to create this project for our COP3530 Data Structures course.
 ## Build Status
 Still under development
 
+[rtsr.run](https://rtsr.run)
+
 ![Build Status](https://travis-ci.org/travis-ci/docs-travis-ci-com.svg?branch=master)
 
 ## Tech/framework used
