@@ -137,7 +137,7 @@ export function djikstra(from, to, graph) {
 
     //Add distances to priority queue
     const iterator = distance.entries();
-    for (var i = 0; i < distance.size; i++) {
+    for (var j = 0; j < distance.size; j++) {
         let arr = iterator.next().value;
         queue.insert(arr[0], arr[1].distance, arr[1].neighbors);
     }
@@ -152,10 +152,10 @@ export function djikstra(from, to, graph) {
         let stopNeighbors = node.neighbors;
 
         //Go through the neighbors for the stop and do the relaxation 
-        for (var i = 0; i < stopNeighbors.length; i++) {
-            let destStop = stopNeighbors[i].dest;
+        for (var k = 0; k < stopNeighbors.length; k++) {
+            let destStop = stopNeighbors[k].dest;
             let oldDistance = distance.get(destStop).distance
-            let newDistance = stopDistance + stopNeighbors[i].weight;
+            let newDistance = stopDistance + stopNeighbors[k].weight;
             if (newDistance < oldDistance) {
                 distance.set(destStop, {distance: newDistance, neighbors: distance.get(destStop).neighbors});
                 predecessor.set(destStop, stop);
@@ -171,7 +171,7 @@ export function djikstra(from, to, graph) {
         
         //Add distances to priority queue but if stop is in checked set, don't add it
         const iterator2 = distance.entries();
-        for (var i = 0; i < distance.size; i++) {
+        for (var l = 0; l < distance.size; l++) {
             let arr = iterator2.next().value;
             if (!checked_Set.has(arr[0])) {
                 queue.insert(arr[0], arr[1].distance, arr[1].neighbors);
@@ -183,14 +183,14 @@ export function djikstra(from, to, graph) {
 
     //Create list of stops leading from source stop to destination
     var reversedPath = [];
-    var stopID = to.stop_id;
-    reversedPath.push(stopID);
-    while (stopID !== from.stop_id) {
-        stopID = predecessor.get(stopID);
-        if (stopID === -1) {
+    var stop_ID = to.stop_id;
+    reversedPath.push(stop_ID);
+    while (stop_ID !== from.stop_id) {
+        stop_ID = predecessor.get(stop_ID);
+        if (stop_ID === -1) {
             return [];
         }
-        reversedPath.push(stopID);
+        reversedPath.push(stop_ID);
     }
     let path = reversedPath.reverse();
     /*
