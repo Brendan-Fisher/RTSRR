@@ -1,7 +1,7 @@
 import { djikstra } from "./algorithms/djikstra"
 import { BFS } from "./algorithms/BFS"
 
-const API_URL = "http://localhost:9000";
+const API_URL = window.location.hostname === 'localhost' ? "http://localhost:9000" : 'https://api.rtsr.run';
 
 /**
  * Function Used to create the adjacency list that is used in the pathfinding algorithms
