@@ -6,11 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
-    "start": "cd server npm run dev"
+    "start": "cd server npm run start"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Brendan-Fisher/RTSRR.git"
+  },
+  "engines": {
+    "node": "12.14.1",
+    "npm": "6.13.4"
   },
   "author": "",
   "license": "ISC",
