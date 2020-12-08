@@ -204,6 +204,7 @@ export function DPath(props) {
 export function ComboPath(props) {
   var output = []
   for(var i = 0; i < props.dPath.length; i++){
+    // eslint-disable-next-line
       if(props.bPath.find(stop => stop.stop_id === props.dPath[i].stop_id))
       {
           output.push(props.dPath[i])
