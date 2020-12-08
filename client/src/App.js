@@ -1,61 +1,14 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import L from "leaflet";
-import { MapContainer, TileLayer, Popup, Marker, Polyline } from "react-leaflet";
+import { MapContainer, TileLayer, Popup, Marker } from "react-leaflet";
 import {
-  Card,
-  CardBody,
-  Collapse,
-  CardText,
-  CardTitle,
   Button,
-  CardSubtitle,
 } from "reactstrap";
 import React, { Component } from "react";
 import Joi from "joi";
-import { getStops, Djikstra, Bfs, PolyMaker, union } from "./API";
-import stop_icon from './icons/stop_icon.svg'
-import djikstra_icon from './icons/djikstra.svg'
-import bfs_icon from './icons/bfs.svg'
-import startPin from './icons/start.svg'
-import endPin from './icons/end.svg'
-
-// Custom icons for bus stops, djikstras path, and BFS path
-var stopIcon = L.icon({
-  iconUrl: stop_icon,
-  iconSize: [30, 30],
-  iconAnchor: [15, 30],
-  popupAnchor: [0, -30],
-});
-
-var startIcon = L.icon({
-  iconUrl: startPin,
-  iconSize: [50, 50],
-  iconAnchor: [25, 50],
-  popupAnchor: [0, -50],
-})
-
-var finishIcon = L.icon({
-  iconUrl: endPin,
-  iconSize: [50, 50],
-  iconAnchor: [25, 50],
-  popupAnchor: [0, -50],
-})
-
-var DIcon = L.icon({
-  iconUrl: djikstra_icon,
-  iconSize: [30, 30],
-  iconAnchor: [15, 30],
-  popupAnchor: [0, -30],
-});
-
-var BIcon = L.icon({
-  iconUrl: bfs_icon,
-  iconSize: [30, 30],
-  iconAnchor: [15, 30],
-  popupAnchor: [0, -30],
-});
-
+import { getStops, Djikstra, Bfs, PolyMaker } from "./API";
+import { stopIcon } from "./icons/icons"
+import { ResetButton, RunButton, Error, Results, InfoCard, StartIcon, FinishIcon, DPath, BPath, Legend, ComboPath } from './components/components'
 
 // Schema validates if "Run" button should be clickable
 const schema = Joi.object().keys({
@@ -66,6 +19,10 @@ const schema = Joi.object().keys({
 class App extends Component {
   constructor(props) {
     super(props);
+    this.handleRunClick = this.handleRunClick.bind(this);
+    this.handleResetClick = this.handleResetClick.bind(this);
+    this.handleStartClick = this.handleStartClick.bind(this);
+    this.handleDestClick = this.handleDestClick.bind(this);
     this.state = {
       location: {
         lat: 29.6516,
@@ -81,7 +38,7 @@ class App extends Component {
       collapse: false,
       zoom: 13,
       stops: [],
-      noPath: false,
+      noPath: true,
       paths: {
         dPath: [],
         dTime: 0,
@@ -93,34 +50,87 @@ class App extends Component {
     };
   }
 
+
+  handleRunClick(e){
+    e.preventDefault()
+    this.setState({
+      collapse: !this.state.collapse,
+      executed: true,
+      noPath: false,
+    });
+
+    const obj = {
+      from: this.state.nodes.from,
+      to: this.state.nodes.to,
+    };
+
+    Djikstra(obj).then((result) => {
+      if(result.length > 0){
+        this.setState({
+          paths: {
+            ...this.state.paths,
+            dPath: result.slice(0, result.length-1),
+            dTime: result.slice(result.length-1)
+          },
+          dPoly: PolyMaker(result)
+        });
+      }
+      else {
+        this.setState({
+          noPath: true,
+        })
+      }
+    });
+
+    
+    Bfs(obj).then((result) => {
+      if(result.length > 0) {
+        this.setState({
+          paths: {
+            ...this.state.paths,
+            bPath: result.slice(0, result.length-1),
+            bTime: result.slice(result.length-1)
+          },
+          bPoly: PolyMaker(result)
+        });
+      }
+      else this.setState({
+        noPath: true
+      })
+    })
+  }
+
+  handleResetClick(e){
+    e.preventDefault()
+    this.clearState();
+  }
+
+  handleStartClick(stop){
+    this.setState({
+      nodes: {
+        ...this.state.nodes,
+        from: stop,
+        srcName: stop.name,
+      },
+    });
+  }
+
+  handleDestClick(stop){
+    this.setState({
+      nodes: {
+        ...this.state.nodes,
+        to: stop,
+        destName: stop.name,
+      },
+    });
+  }
+
   // When page loads, get stops from database and attach them to program state
   componentDidMount() {
     getStops().then((stops) => {
       this.setState({
         stops,
       });
-    });
-  }
-
-  // Set the start node when stop is selected from map
-  setSrc(i) {
-    this.setState({
-      nodes: {
-        ...this.state.nodes,
-        from: i,
-        srcName: i.name,
-      },
-    });
-  }
-
-  // Set the destination node when stop is selected from map
-  setDest(i) {
-    this.setState({
-      nodes: {
-        ...this.state.nodes,
-        to: i,
-        destName: i.name,
-      },
     });
   }
 
@@ -154,142 +164,51 @@ class App extends Component {
       },
       dPoly: [],
       bPoly: [],
+      noPath: true,
     })
   }
-
-  // Called when "Run" button is clicked, entry point into backend pathfinding
-  runProgram = (event) => {
-    event.preventDefault();
-    if(!this.state.executed){
-      this.setState({
-        collapse: !this.state.collapse,
-        noPath: false,
-      });
-  
-      const obj = {
-        from: this.state.nodes.from,
-        to: this.state.nodes.to,
-      };
-  
-      Djikstra(obj).then((result) => {
-        if(result.length > 0){
-          this.setState({
-            paths: {
-              ...this.state.paths,
-              dPath: result.slice(0, result.length-1),
-              dTime: result.slice(result.length-1)
-            },
-            executed: !this.state.executed,
-            dPoly: PolyMaker(result)
-          });
-        }
-        else {
-          this.setState({
-            noPath: true,
-          })
-        }
-      });
-  
-      
-      Bfs(obj).then((result) => {
-        if(result.length > 0) {
-          this.setState({
-            paths: {
-              ...this.state.paths,
-              bPath: result.slice(0, result.length-1),
-              bTime: result.slice(result.length-1)
-            },
-            bPoly: PolyMaker(result)
-          });
-        }
-        else this.setState({
-          noPath: true
-        })
-      })
-
-      this.setState({
-        paths: {
-          ...this.state.paths,
-          comboPath: union(this.state.paths.dPath, this.state.paths.bPath)
-        }
-      })
-      console.log("ComboPath:")
-      console.log(this.state.paths.comboPath)
-    }
-    else {
-      this.clearState();
-    }
-    
-  };
-
 
   // What is loaded onto page
   render() {
     // Where the map is centered when the page loads
     const position = [this.state.location.lat, this.state.location.long];
+    var isExecuted = this.state.executed;
+    var pathFound = !this.state.noPath;
+    var drawPaths = false;
+    let runButton, errorCard, resultCard, BFSpath, Djikpath, Combopath;
+    let legend = <Legend />
+
+    if(this.searchIsValid() && !isExecuted){
+      runButton = <RunButton onClick={this.handleRunClick} />
+    }
+    else {
+      runButton = <ResetButton validSearch={this.searchIsValid()} onClick={this.handleResetClick} pathFound={pathFound} />
+    } 
+
+    if(isExecuted && pathFound) drawPaths = true;
+    
+    if(drawPaths) {
+      if(pathFound){
+        Combopath = <ComboPath dPath={this.state.paths.dPath} bPath={this.state.paths.bPath}/>
+        BFSpath = <BPath Path={this.state.paths.bPath} bPoly={this.state.bPoly} />
+        Djikpath = <DPath Path={this.state.paths.dPath} dPoly={this.state.dPoly} />
+      } 
+    }
+
+    if(isExecuted && !pathFound){
+      errorCard = <Error resetButton={runButton}/>
+    }
+    else if(pathFound){
+      resultCard = <Results dTime={this.state.paths.dTime} bTime={this.state.paths.bTime} dLength={this.state.paths.dPath.length} bLength={this.state.paths.bPath.length} />
+    }
+    
+    let begIcon = <StartIcon nodes={this.state.nodes} />
+    let endIcon = <FinishIcon nodes={this.state.nodes} />
+    let infoCard = <InfoCard srcName={this.state.nodes.srcName} destName={this.state.nodes.destName} collapse={this.state.collapse} results={resultCard} runButton={runButton} />;
+
     return (
       <div className="map">
-        <Card
-          className="program-info"
-          body
-          inverse
-          style={{
-            backgroundColor: "#333",
-            borderColor: "#333",
-            position: "absolute",
-          }}
-        >
-          <CardTitle tag="h4">RTS Route Runner</CardTitle>
-          <CardText>
-            Select two markers and click "Run" to calculate the quickest route
-            between the two points
-          </CardText>
-          <Button
-            color="primary"
-            onClick={this.runProgram}
-            style={{ marginBottom: "1rem" }}
-            disabled={!this.searchIsValid()}
-          >
-            {
-            !this.state.executed ? 
-              <h5><u>Run</u></h5>
-              :
-              <h5><u>Reset</u></h5>
-            }
-          </Button>
-          <Collapse isOpen={this.state.collapse}>
-            <Card
-              body
-              inverse
-              style={{
-                backgroundColor: "#333",
-                borderColor: "white",
-                padding: ".25rem",
-              }}
-            >
-              <CardBody style={{ padding: ".25rem" }}>
-                <CardTitle tag="h4">Results:</CardTitle>
-                <CardSubtitle tag="h5" className="mb-2">
-                  Start Location:
-                </CardSubtitle>
-                <CardText>{this.state.nodes.srcName}</CardText>
-                <CardSubtitle tag="h5" className="mb-2" color="0384fc">
-                  Destination Location:
-                </CardSubtitle>
-                <CardText>{this.state.nodes.destName}</CardText>
-                <CardSubtitle tag="h5" className="mb-2">
-                  Performance:
-                </CardSubtitle>
-                <CardText>
-                  Time for Djikstra's algorithm: <tab></tab> {this.state.paths.dTime} ms
-                  <br></br>
-                  Time for BFS: <tab></tab> {this.state.paths.bTime} ms
-                </CardText>
-              </CardBody>
-            </Card>
-          </Collapse>
-        </Card>
-
+        {infoCard}
         <MapContainer
           className="map"
           center={position}
@@ -300,7 +219,6 @@ class App extends Component {
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-
           {
             // Map all of the stops
             !this.state.executed ?
@@ -312,7 +230,7 @@ class App extends Component {
                 >
                   <Popup>
                     <Button
-                      onClick={() => this.setSrc(stop)}
+                      onClick={() => this.handleStartClick(stop)}
                       id="source"
                       color="primary"
                       size="sm"
@@ -322,7 +240,7 @@ class App extends Component {
                     </Button>
                     
                     <Button
-                      onClick={() => this.setDest(stop)}
+                      onClick={() => this.handleDestClick(stop)}
                       id="destination"
                       color="primary"
                       size="sm"
@@ -343,62 +261,24 @@ class App extends Component {
           }
           {
             // Mark the start and end positions
-            this.state.executed && !this.state.noPath  ? 
+            drawPaths && isExecuted ? 
             [
-              <Marker position={[this.state.nodes.to.lat, this.state.nodes.to.long]} icon={finishIcon}>
-                <Popup>
-                  <h6>
-                      <b>{this.state.nodes.to.name}</b>
-                  </h6>
-                </Popup>
-              </Marker>
+              begIcon
               ,
-              <Marker position={[this.state.nodes.from.lat, this.state.nodes.from.long]} icon={startIcon}>
-                <Popup>
-                  <h6>
-                      <b>{this.state.nodes.from.name}</b>
-                  </h6>
-                </Popup>
-              </Marker>
+              endIcon
               ,
-              // Map the Djikstra Path
-              this.state.paths.bPath.map((stop) => (
-                [
-                  <Marker
-                    position={[stop.lat, stop.long]}
-                    icon={BIcon}
-                  >
-                    <Popup>
-                    <h6>
-                      <b>{stop.name}</b>
-                    </h6>
-                    </Popup>
-                  </Marker>
-                  ,
-                  <Polyline color={'green'} positions={this.state.bPoly} />
-                ]
-              ))
+              BFSpath
               ,
-              // Map the BFS Path
-              this.state.paths.dPath.map((stop) => (
-                [
-                  <Marker
-                    position={[stop.lat, stop.long]}
-                    icon={DIcon}
-                  >
-                    <Popup>
-                    <h6>
-                      <b>{stop.name}</b>
-                    </h6>
-                    </Popup>
-                  </Marker>
-                  ,
-                  <Polyline color={'black'} positions={this.state.dPoly} />
-                ]
-              ))
+              Djikpath
+              ,
+              legend
+              ,
+              resultCard
+              ,
+              Combopath              
             ]
             :
-            console.log("No Possible Path between the two stops")
+              errorCard
           }
         </MapContainer>
       </div>
