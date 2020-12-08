@@ -6,6 +6,10 @@ import endPin from './end.svg'
 import both_icon from './both.svg'
 import L from "leaflet";
 
+/**
+ * Leaflet icons for representing each path and the beginning and end of each path
+ */
+
 export var stopIcon = L.icon({
     iconUrl: stop_icon,
     iconSize: [30, 30],

@@ -4,7 +4,7 @@ const router = express.Router();
 const Route = require("./route.model");
 
 /**
- * Router for localhost:9000/routes
+ * Router for /routes
  *  returns all of the routes in the database
  */
 router.route("/").get(function (req, res) {
@@ -18,17 +18,8 @@ router.route("/").get(function (req, res) {
 });
 
 /**
- * Allows for the lookup of individual route object based on its mongoose ObjectID
- */
-router.route("/:id").get(function (req, res) {
-  let id = req.params.id;
-  Route.findById(id, function (err, route) {
-    res.json(route);
-  });
-});
-
-/**
- * Allows for the lookup of individual route object based on its unique route_id
+ * Router for /routes/find/
+ *  Finds the route with the route_id matching what you put after find/
  */
 router.route("/find/:id").get(function (req, res) {
   let route_id = req.params.id;
@@ -38,21 +29,7 @@ router.route("/find/:id").get(function (req, res) {
 });
 
 /**
- * Allows for the lookup of several route objects based on whether they pass through a particular stop
- */
-router.route("/findByStop/:id").get(function (req, res) {
-  let stop_id = req.params.id;
-  Route.find(function (err, routes) {
-    if (err) {
-      res.status(400).send(err);
-    } else {
-      res.json(routes);
-    }
-  });
-});
-
-/**
- * Router for localhost:9000/routes/add
+ * Router for /routes/add
  *  Adds new routes to the database
  *  Allows for adding new routes in batches
  *  Used postman to add all routes after getting them from the Transloc API

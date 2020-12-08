@@ -13,16 +13,22 @@ class PriorityQueue {
     }
     
     insert(stopID, value, neighbors) {
+
         //Create a node
         const newNode = new Node(stopID, value, neighbors);
+
         //Push Node to the back of the heap
         this.heap.push(newNode);
+
         //Current index of the new node
         let currentIndex = this.heap.length - 1;
+
         //Index of parent node => 0 if new node is the root & and floor((index-1)/2) otherwise
         let parentIndex = (currentIndex===0) ? 0 : Math.floor((currentIndex - 1) / 2);
+
         //Heapify Up => While index of new node != 0 and new node's value < parent's value
         while ((currentIndex !== 0) && newNode.value < this.heap[parentIndex].value) {
+
             //If in here, Nodes => create a temp node called tempNode
             const parentNode = this.heap[parentIndex];
             this.heap[parentIndex] = newNode;
@@ -30,43 +36,60 @@ class PriorityQueue {
             currentIndex = parentIndex;
             parentIndex = Math.floor((currentIndex - 1) / 2);
         }
+
         //Increase size of heap by 1
         this.size = this.size + 1;
     }
     remove() {
+
         //If heap is empty
         if (this.size === 0) {
             return null;
         }
+
         //Need to return the top node
         let toRemove = this.heap[0];
+
         //Decrement heap size by 1
         this.size = this.size - 1;
+
         //Move the last node to the top
         this.heap[0] = this.heap[this.size];
+
         //Current index
         let currentIndex = 0;
+
         //Left Child's index
         let leftChildIndex = 2*currentIndex + 1;
+
         //Right Child's index
         let rightChildIndex = 2*currentIndex + 2;
+
         //Smallest node index
         let smallestNodeIndex = currentIndex;
+
         //Heapify down => While node has a child
         var done = false 
+
         while(!done) {
+
             //If left child exists & is less than the parent
             if ((leftChildIndex < this.size) && (this.heap[leftChildIndex].value < this.heap[smallestNodeIndex].value)) {
+
                 //If here, left child is less than parent
                 smallestNodeIndex = leftChildIndex;
             }
+
             //If right child exists & is less than the parent or the left if left < parent
             if ((rightChildIndex < this.size) && (this.heap[rightChildIndex].value < this.heap[smallestNodeIndex].value)) {
+
                 //If here, left child is less than parent
                 smallestNodeIndex = rightChildIndex;
             }
+
             //If smallest node changed
             if (currentIndex !== smallestNodeIndex) {
+
                 //Swap
                 const parentNode = this.heap[currentIndex];
                 this.heap[currentIndex] = this.heap[smallestNodeIndex];
@@ -74,7 +97,6 @@ class PriorityQueue {
                 currentIndex = smallestNodeIndex;
                 leftChildIndex = 2*currentIndex + 1;
                 rightChildIndex = 2*currentIndex + 2;
-
             }
             else {
                 done = true;
@@ -122,6 +144,7 @@ export function djikstra(from, to, graph) {
     
     //Start of Djikstra's Algorithm
     while (unchecked_Set.size > 0) {
+
         //Bus Stop with the shortest distance from the source bus stop
         let node = queue.remove();
         let stop = node.stopID;
@@ -138,12 +161,14 @@ export function djikstra(from, to, graph) {
                 predecessor.set(destStop, stop);
             }
         }
+
         //Remove bus stop from unchecked set and insert it into the checked set
         unchecked_Set.delete(stop);
         checked_Set.add(stop);
 
         //Recreate Queue
         queue = new PriorityQueue();
+        
         //Add distances to priority queue but if stop is in checked set, don't add it
         const iterator2 = distance.entries();
         for (var i = 0; i < distance.size; i++) {

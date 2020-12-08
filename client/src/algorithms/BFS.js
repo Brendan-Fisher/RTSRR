@@ -33,28 +33,26 @@ class Queue
     
     isEmpty() 
     { 
-        if(this.items.length == 0)
+        if(this.items.length === 0)
         {
             return true;
         } 
-        else return false;
-        
+        else return false; 
     }
 
 }
 
+function setMaps(maps, _predecessor, graph)
+{
+    for(var i = 0; i < graph.length; i++)
+    {
+    maps.set(graph[i].src, {neighbors: graph[i].edges});
+    _predecessor.set(graph[i].src, -1);
+    }
+}
 
- function setMaps(maps, _predecessor, graph)
- {
-     for(var i = 0; i < graph.length; i++)
-     {
-        maps.set(graph[i].src, {neighbors: graph[i].edges});
-        _predecessor.set(graph[i].src, -1);
-     }
- }
 
-
- export function BFS(from, to, graph){
+export function BFS(from, to, graph){
     // Containers
     var visited = new Set();
     var queue = new Queue();
@@ -67,7 +65,7 @@ class Queue
     queue.enqueue(from.stop_id)
     // Queue and add the starting stop_id to the visited array
     visited.add(from.stop_id);
-    
+
     // Start BFS
     while(!queue.isEmpty())
     {
@@ -105,9 +103,6 @@ class Queue
         
         if(breaker)
             break;
-        
-        
-
     }
 
     // Create list of stops leading from source stop to destination

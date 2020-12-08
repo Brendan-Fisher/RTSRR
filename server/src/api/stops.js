@@ -4,7 +4,7 @@ const router = express.Router();
 const Stop = require("./stop.model");
 
 /**
- * Router for localhost:9000/stops
+ * Router for /stops
  *  returns all of the stops in the database
  */
 router.route("/").get(function (req, res) {
@@ -18,17 +18,8 @@ router.route("/").get(function (req, res) {
 });
 
 /**
- * Allows for lookup of individual stop based on its mongoose ObjectID
- */
-router.route("/:id").get(function (req, res) {
-  let id = req.params.id;
-  Stop.findById(id, function (err, stop) {
-    res.json(stop);
-  });
-});
-
-/**
- * Allows for lookup of individual stop based on its unique stop_id
+ * Router for /stops/find/
+ *  returns the stop with a stop_id matching what you put after find/
  */
 router.route("/find/:id").get(function (req, res) {
   let stop_id = req.params.id;
@@ -37,18 +28,8 @@ router.route("/find/:id").get(function (req, res) {
   });
 });
 
-router.route("/findPath").get(function (req, res) {
-  let path = [];
-  for(var i = 0; i < req.body.path.length; i++){
-    Stop.find({ stop_id: req.body.path[i] }, function (err, stop) {
-      path.push(stop)
-    })
-  }
-  res.json(path)
-})
-
 /**
- * Router for localhost:9000/routes/add
+ * Router for /stops/add
  *  Adds new stops to the database
  *  Allows for adding new stops in batches
  *  Used postman to add all stops after getting them from the Transloc API

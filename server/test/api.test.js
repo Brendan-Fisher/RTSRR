@@ -2,6 +2,12 @@ const request = require("supertest");
 
 const app = require("../src/app");
 
+/**
+ * Tests used to get the database working properly
+ * Disabled to protect database from being modified
+ */
+
+/*
 describe("GET /stops", () => {
   it("responds with a json object", (done) => {
     request(app)
@@ -11,6 +17,7 @@ describe("GET /stops", () => {
       .expect(200, done);
   });
 });
+
 
 describe("POST /stops/add", () => {
   it("inserts a new stop", (done) => {
@@ -57,3 +64,4 @@ describe("GET /routes", () => {
       .expect(200, done);
   });
 });
+*/

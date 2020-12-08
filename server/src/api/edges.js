@@ -8,7 +8,10 @@ const Route = require("./route.model");
  * Helper function used to create the edges
  *  For every route in the database, each stop in that route points to the stop that follows it
  *  The final stop in every route then points to the first stop
+ *    This isn't entirely accurate as some routes arent cyclical
+ *      Fixed this manually
  */
+/*
 function makePairs() {
   Route.find(function (err, routes) {
     if (err) {
@@ -49,9 +52,10 @@ function makePairs() {
     }
   });
 }
+*/
 
 /**
- * Router for localhost:9000/edges
+ * Router for /edges
  *  returns all of the edges in the database
  */
 router.route("/").get(function (req, res) {
@@ -64,6 +68,11 @@ router.route("/").get(function (req, res) {
   });
 });
 
+
+/**
+ * Router for /edges/find/
+ *  Finds the edge object with the src property matching the ID after find/
+ */
 router.route("/find/:id").get(function (req, res) {
   let stop_id = req.params.id;
   Edge.find({ src: stop_id }, function (err, edge) {
@@ -72,7 +81,7 @@ router.route("/find/:id").get(function (req, res) {
 })
 
 /**
- * Router for localhost:9000/edges/add
+ * Router for /edges/add
  *  Adds new edges to the database
  *  Allows for adding new edges in batches
  *  Used postman to add all edges after using makePairs() to create them
@@ -101,8 +110,9 @@ router.route("/add").post(function (req, res) {
 });
 
 /**
- * Router for localhost:9000/edges/remove
- *  returns an array of all the edges that need to be looked at because their edge weights are greater than 3000
+ * Router for /edges/remove
+ *  returns an array of all the edges that need to be looked at because their edge weights are greater than 2000
+ *    this occurs on noncyclic routes that need to be fixed manually
  */
 router.route("/remove").get(function (req, res) {
   var badEdges = []
@@ -124,7 +134,7 @@ router.route("/remove").get(function (req, res) {
 })
 
 /**
- * Router for localhost:9000/edges/addWeight
+ * Router for /edges/addWeight
  *  After creating the edges, this function allows user to add the weights to each edge
  *  Weights were determined by using a Distance API to get a reasonable measure for how far a car would travel to get from one stop to another
  */
