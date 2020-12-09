@@ -1,6 +1,8 @@
 ## RTS Route Runners
 **RTS Route Runners** is an application built on the MERN stack that compares the efficiency of the BFS and Djikstra's pathfinding algorithm for finding the most efficient route from one bus stop to another in the Gainesville, FL area.
 
+![](https://media.giphy.com/media/oI7jfvmEGJLSq7tmY6/giphy.gif)
+
 ## Motivation
 We were motivated to create this project for our COP3530 Data Structures course. This project represents the final project for this course in which we were tasked with comparing the performance of either two data structures or two algorithms
 
