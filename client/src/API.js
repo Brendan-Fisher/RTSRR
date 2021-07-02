@@ -1,7 +1,10 @@
-import { djikstra } from "./algorithms/djikstra"
-import { BFS } from "./algorithms/BFS"
+import { djikstra } from "./algorithms/djikstra";
+import { BFS } from "./algorithms/BFS";
 
-const API_URL = window.location.hostname === 'localhost' ? "http://localhost:9000" : 'https://rtsrr.vercel.app';
+const API_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:9000"
+    : "http://rtsrr.vercel.app";
 
 /**
  * Function Used to create the adjacency list that is used in the pathfinding algorithms
@@ -57,31 +60,31 @@ export function getStops() {
     .then((res) => res.json())
     .then((stops) => {
       return stops;
-  });
+    });
 }
 
-// Function to convert an array of stop objects into an array of {latitude, longitude} points for lines to be drawn 
+// Function to convert an array of stop objects into an array of {latitude, longitude} points for lines to be drawn
 export function PolyMaker(path) {
   var output = [];
-  for(var i = 0; i < path.length-1; i++){
+  for (var i = 0; i < path.length - 1; i++) {
     output.push([path[i].lat, path[i].long]);
   }
   return output;
 }
 
 // Converts an array of just stop_id's to the actual stop objects that they represent so that we can have access to their locations
-async function buildPath(path){
+async function buildPath(path) {
   var stops = await fetch(API_URL + "/stops").then((res) => res.json());
-  var newPath = []
+  var newPath = [];
 
-  if(path.length !== 1){
-    for(var i = 0; i < path.length-1; i++){
+  if (path.length !== 1) {
+    for (var i = 0; i < path.length - 1; i++) {
       // eslint-disable-next-line
-      newPath.push(stops.find(stop => stop.stop_id === path[i]));
+      newPath.push(stops.find((stop) => stop.stop_id === path[i]));
     }
-    newPath.push(path[path.length-1])
+    newPath.push(path[path.length - 1]);
   }
-  return newPath
+  return newPath;
 }
 
 // Calls Djikstra's algorithm and returns the shortest path between the two stops selected as well as the time to find the path as the last element in the array
@@ -90,12 +93,12 @@ export async function Djikstra(obj) {
     .then((res) => res.json())
     .then((edges) => {
       var t0 = new Date().getTime();
-      var djikPath = djikstra(obj.from, obj.to, edges)
+      var djikPath = djikstra(obj.from, obj.to, edges);
       var t1 = new Date().getTime();
-      var dTime = t1-t0
-      console.log("Djikstra Time: ", dTime)
-      djikPath.push(dTime)
-      return buildPath(djikPath)
+      var dTime = t1 - t0;
+      console.log("Djikstra Time: ", dTime);
+      djikPath.push(dTime);
+      return buildPath(djikPath);
     });
 }
 
@@ -105,10 +108,10 @@ export async function Bfs(obj) {
     .then((res) => res.json())
     .then((edges) => {
       var t0 = new Date().getTime();
-      var bfsPath = BFS(obj.from, obj.to, edges)
+      var bfsPath = BFS(obj.from, obj.to, edges);
       var t1 = new Date().getTime();
-      var bTime = t1-t0
-      bfsPath.push(bTime)
-      return buildPath(bfsPath)
-    })
+      var bTime = t1 - t0;
+      bfsPath.push(bTime);
+      return buildPath(bfsPath);
+    });
 }
